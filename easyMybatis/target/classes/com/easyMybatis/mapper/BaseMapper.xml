@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easyMybatis.mapper.BaseMapper">
+
+	<insert id="save">
+        INSERT INTO BASE_USER( 
+	        ID, 
+	        LOGIN, 
+	        PASSWORD, 
+	        NAME, 
+	        DESCRIPTION, 
+	        ENABLED
+        ) VALUES (
+	        #{id},
+			#{login},
+			#{password},
+			#{name},
+			#{description},
+			#{enabled}
+        )
+    </insert>
+
+    <insert id="saveBatch" parameterType="java.util.List" useGeneratedKeys="false">
+        INSERT INTO BASE_USER
+        ( ID, LOGIN, PASSWORD, NAME, DESCRIPTION, ENABLED)
+        (
+        <foreach collection="list" item="item" separator="union all">
+            SELECT
+            #{item.id, jdbcType=VARCHAR},
+            #{item.login, jdbcType=VARCHAR},
+            #{item.password, jdbcType=VARCHAR},
+            #{item.name, jdbcType=VARCHAR},
+            #{item.description, jdbcType=VARCHAR},
+            #{item.enabled, jdbcType=VARCHAR}
+            FROM DUAL
+        </foreach>
+        )
+    </insert>
+    
+</mapper>
